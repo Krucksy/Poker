@@ -1,48 +1,12 @@
+const { JeuDeCarte } = require("./jeuDeCarte");
 const stdin = process.openStdin();
 
-const COULEUR = {
-    "COEUR": 0,
-    "PIQUE": 1,
-    "CARREAU": 2,
-    "TREFLE": 3,
-    "MAX": 4
-}
-
-const TYPE = {
-    "TWO": 0,
-    "THREE": 1,
-    "FOUR": 2,
-    "FIVE": 3,
-    "SIX": 4,
-    "SEVEN": 5,
-    "EIGHT": 6,
-    "NINE": 7,
-    "TEN": 8,
-    "J": 9,
-    "Q": 10,
-    "K": 11,
-    "AS": 12,
-    "MAX": 13
-}
 
 const NIVEAU_TABLE = {
     "NOVICE":  {"ARGENT_MAIN_MIN":1000, "ARGENT_MAIN_MAX": 5000,  "PARI_MIN":100},
     "MEDIUM":  {"ARGENT_MAIN_MIN":5000, "ARGENT_MAIN_MAX": 10000, "PARI_MIN":500},
     "HARD":    {"ARGENT_MAIN_MIN":10000, "ARGENT_MAIN_MAX": 100000, "PARI_MIN":1000},
-    "LEGENDS": {"ARGENT_MAIN_MIN":100000, "ARGENT_MAIN_MAX": 1000000, "PARI_MIN":5000},
-}
-
-
-class Carte {
-    /**
-     * 
-     * @param {COULEUR} couleur 
-     * @param {TYPE} type 
-     */
-    constructor(couleur, type) {
-        this.couleur = couleur
-        this.type = type
-    }
+    "LEGENDS": {"ARGENT_MAIN_MIN":100000, "ARGENT_MAIN_MAX": Infinity, "PARI_MIN":5000},
 }
 
 class Joueur {
@@ -56,10 +20,14 @@ class Joueur {
 
     /**
      * 
-     * @param {Carte[]} carte 
+     * @param {JeuDeCarte[]} carte 
      */
     recevoirCartes(carte) {
-        this.deck.concat(carte)
+        this.deck.push(carte)
+    }
+
+    resetDeck() {
+        this.deck = []
     }
 
     demanderMise(callback) {
@@ -105,7 +73,11 @@ class Table {
         this.joueurs = joueurs || []
         this.jeuDeCarte = new JeuDeCarte
         this.pot = 0
+<<<<<<< HEAD:cartes.js
         this.deckTable = []
+=======
+        this.carteSurTable = []
+>>>>>>> 5938db2e0fff94ac9ba3f27b1958df1f5c2a6746:table.js
 
     }
 
@@ -113,6 +85,7 @@ class Table {
         this.joueurs.push(nouveauJoueur)
     }
 
+<<<<<<< HEAD:cartes.js
     retirerJoueur(joueurARetirer) {
         const indexJoueurARetirer = this.joueurs.indexOf(joueurARetirer)
         if (indexJoueurARetirer === -1) // aucun joueur trouvé avec le paramètre
@@ -134,6 +107,51 @@ class Table {
             demandesLesMises()
             Découvre le gagnant
             Donne pot au gagnant
+=======
+    retirerJoueur(nomJoueur) {
+        // Supprime le joueur donné en param de la liste de joueurs
+        for(let i = 0; i < joueurs.length; i++) {
+            if(nomJoueur == joueurs[i]) {
+                joueurs.splice(i,1)
+            }
+        }
+    }
+
+    round() {
+        const participants = this.joueurs.slice()
+        let miseActuelMax = 0
+        
+        // Ajoute 2 carte à chaque joueur
+        participants.forEach(participant => {
+            participant.recevoirCartes(this.jeuDeCarte.tirerCartes(2))
+        })
+
+        // boucle "for" asyncrone qui demande la mise à tout les participants
+        const demandeToutesLesMises = callback => {
+            let i = 0;
+
+            // une itération de la "boucle for"
+            const demandeMise = () => {
+                participants[i].demanderMise(mise =>
+                {
+
+                    this.pot += mise;
+
+                    i++;
+                    if(i < participants.length) {
+                        // se rappel si la boulce n'est pas finie
+                        demandeMise()
+                    }
+                    else
+                    {
+                        // appel callback quand tout est fini
+                        callback()
+                    }
+                })
+            }
+
+            demandeMise();
+>>>>>>> 5938db2e0fff94ac9ba3f27b1958df1f5c2a6746:table.js
         }
    
         fonction demandesLesMises() {
@@ -176,6 +194,7 @@ class Table {
         
     */
 
+<<<<<<< HEAD:cartes.js
     round() {
         // Défini le nouveau dealer
         let aTrouverUnDealer = false
@@ -191,56 +210,39 @@ class Table {
 
         
     }
+=======
+        demandeToutesLesMises(() =>
+        {
+            /*
+            TO DO
+            */
+        })
 
+        // Ajoute 2 carte sur le board
+        this.carteSurTable += this.jeuDeCarte.tirerCartes(3)
 
-    
-}
+        // De nouveau les paris
+        /*
+        TO DO
+        */
 
-class JeuDeCarte {
-    constructor() {
-        this.listeCarte = []
-        this.remplirListeCarte()
-    }
+        // Ajoute 1 carte sur le board
+        this.carteSurTable += this.jeuDeCarte.tirerCartes(1)
 
-    remplirListeCarte() {
-        this.viderListeCarte()
-        for (let i = 0; i < COULEUR.MAX; i++) {
-            for (let j = 0; j < TYPE.MAX; j++) {
-                this.listeCarte.push(new Carte(i,j))
-            }
-        }
-        this.mélangerListeCarte()
-    }
+        // De nouveau les paris
+        /*
+        TO DO
+        */
 
-    mélangerListeCarte() {
-        shuffle(this.listeCarte)
-    }
+        // Ajoute 1 carte sur le board
+        this.carteSurTable += this.jeuDeCarte.tirerCartes(1)
+>>>>>>> 5938db2e0fff94ac9ba3f27b1958df1f5c2a6746:table.js
 
-    viderListeCarte() {
-        this.listeCarte = []
-    }
-
-    tirerCarteDessus() {
-        return this.listeCarte.shift()
-    }
-
-    tirerCartes(nombre) {
-        return this.listeCarte.splice(0,nombre)
-    }
+        
 
     
 }
 
-/**
- * Shuffles array in place. ES6 version
- * @param {Array} a items An array containing the items.
- */
-function shuffle(a) {
-    for (let i = a.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [a[i], a[j]] = [a[j], a[i]];
-    }
-}
 
 module.exports = {
     Joueur,
