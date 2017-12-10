@@ -73,11 +73,8 @@ class Table {
         this.joueurs = joueurs || []
         this.jeuDeCarte = new JeuDeCarte
         this.pot = 0
-<<<<<<< HEAD:cartes.js
         this.deckTable = []
-=======
-        this.carteSurTable = []
->>>>>>> 5938db2e0fff94ac9ba3f27b1958df1f5c2a6746:table.js
+        this.nombreJoueurs = this.joueurs.length
 
     }
 
@@ -85,7 +82,6 @@ class Table {
         this.joueurs.push(nouveauJoueur)
     }
 
-<<<<<<< HEAD:cartes.js
     retirerJoueur(joueurARetirer) {
         const indexJoueurARetirer = this.joueurs.indexOf(joueurARetirer)
         if (indexJoueurARetirer === -1) // aucun joueur trouvé avec le paramètre
@@ -98,6 +94,13 @@ class Table {
 
             Défini le dealer
             Donne 2 cartes à chaque joueur
+            IF nombres de joueur > 2
+                Le premier joueur après le dealer mise la moitié du la mise min
+                Le deuxième joueur après le dealer mise la mise min
+            ELSE 
+                Le premier joueur après le dealer mise la mise min
+
+            le troisième joueur prend la main
             demandesLesMises()
             Pose 3 cartes sur la table
             demandesLesMises()
@@ -107,62 +110,9 @@ class Table {
             demandesLesMises()
             Découvre le gagnant
             Donne pot au gagnant
-=======
-    retirerJoueur(nomJoueur) {
-        // Supprime le joueur donné en param de la liste de joueurs
-        for(let i = 0; i < joueurs.length; i++) {
-            if(nomJoueur == joueurs[i]) {
-                joueurs.splice(i,1)
-            }
-        }
-    }
-
-    round() {
-        const participants = this.joueurs.slice()
-        let miseActuelMax = 0
-        
-        // Ajoute 2 carte à chaque joueur
-        participants.forEach(participant => {
-            participant.recevoirCartes(this.jeuDeCarte.tirerCartes(2))
-        })
-
-        // boucle "for" asyncrone qui demande la mise à tout les participants
-        const demandeToutesLesMises = callback => {
-            let i = 0;
-
-            // une itération de la "boucle for"
-            const demandeMise = () => {
-                participants[i].demanderMise(mise =>
-                {
-
-                    this.pot += mise;
-
-                    i++;
-                    if(i < participants.length) {
-                        // se rappel si la boulce n'est pas finie
-                        demandeMise()
-                    }
-                    else
-                    {
-                        // appel callback quand tout est fini
-                        callback()
-                    }
-                })
-            }
-
-            demandeMise();
->>>>>>> 5938db2e0fff94ac9ba3f27b1958df1f5c2a6746:table.js
         }
    
         fonction demandesLesMises() {
-            IF nombres de joueur > 2
-                Le premier joueur après le dealer mise la moitié du la mise min
-                Le deuxième joueur après le dealer mise la mise min
-            ELSE 
-                Le premier joueur après le dealer mise la mise min
-
-            le troisième joueur prend la main
-
             FOR i, i < nombre de participants, i++
                 IF participant.miseActuel != miseActuelTable
                     IF participant suit
@@ -194,49 +144,48 @@ class Table {
         
     */
 
-<<<<<<< HEAD:cartes.js
     round() {
         // Défini le nouveau dealer
         let aTrouverUnDealer = false
-        for (let i; i < joueurs.length; i++) {
+        for (let i; i < nombreJoueurs; i++) {
             if (this.joueurs[i].dealer) {
                 this.joueurs[i].dealer = false
                 this.joueurs[i+1].dealer = true
             }    
         }
-        // Si il n'y a aucun dealer, en générer un aléatoirement
+        // Si il n'y a aucun dealer, en désigne un aléatoirement
         if (!aTrouverUnDealer)
             this.joueurs[Math.floor(Math.random())].dealer = true
 
-        
-    }
-=======
-        demandeToutesLesMises(() =>
-        {
-            /*
-            TO DO
-            */
+        // Distrubue 2 carte à chaque joueur
+        participants.forEach(participant => {
+            participant.recevoirCartes(this.jeuDeCarte.tirerCartes(2))
         })
 
-        // Ajoute 2 carte sur le board
-        this.carteSurTable += this.jeuDeCarte.tirerCartes(3)
+        // Force les 2 premiers joueurs à miser
+        if (nombreJoueurs > 2) {
+            for (let i; i < nombreJoueurs; i++) {
+                if (this.joueurs[i].dealer) {
+                    this.joueurs[i+1].augmenteMise(niveauTable.PARI_MIN/2)
+                    this.joueurs[i+2].augmenteMise(niveauTable.PARI_MIN)
+                }    
+            }
+        } else {
+            for (let i; i < nombreJoueurs; i++) {
+                if (this.joueurs[i].dealer) {
+                    this.joueurs[i+1].augmenteMise(niveauTable.PARI_MIN)
+                }    
+            }
+        }
 
-        // De nouveau les paris
-        /*
-        TO DO
-        */
 
-        // Ajoute 1 carte sur le board
-        this.carteSurTable += this.jeuDeCarte.tirerCartes(1)
+        
+    }
 
-        // De nouveau les paris
-        /*
-        TO DO
-        */
-
-        // Ajoute 1 carte sur le board
-        this.carteSurTable += this.jeuDeCarte.tirerCartes(1)
->>>>>>> 5938db2e0fff94ac9ba3f27b1958df1f5c2a6746:table.js
+    demanderLesMises() {
+        
+    }
+    
 
         
 
