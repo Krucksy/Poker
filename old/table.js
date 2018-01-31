@@ -19,8 +19,8 @@ class Joueur {
     }
 
     /**
-     * 
-     * @param {JeuDeCarte[]} carte 
+     *
+     * @param {JeuDeCarte[]} carte
      */
     recevoirCartes(carte) {
         this.deck.push(carte)
@@ -37,7 +37,7 @@ class Joueur {
             stdin.removeAllListeners("data")
 
             const mise = parseInt(d.toString());
-            
+
             this.miseActuel += mise
 
             callback(mise)
@@ -64,7 +64,7 @@ class Joueur {
 
 class Table {
     /**
-     * 
+     *
      * @param {NIVEAU_TABLE} niveauTable
      * @param {Joueur[]} joueurs
      */
@@ -85,7 +85,7 @@ class Table {
     retirerJoueur(joueurARetirer) {
         const indexJoueurARetirer = this.joueurs.indexOf(joueurARetirer)
         if (indexJoueurARetirer === -1) // aucun joueur trouvé avec le paramètre
-            return 
+            return
         this.joueurs.splice(indexJoueurARetirer, 1)
     }
 
@@ -97,7 +97,7 @@ class Table {
             IF nombres de joueur > 2
                 Le premier joueur après le dealer mise la moitié du la mise min
                 Le deuxième joueur après le dealer mise la mise min
-            ELSE 
+            ELSE
                 Le premier joueur après le dealer mise la mise min
 
             le troisième joueur prend la main
@@ -111,7 +111,7 @@ class Table {
             Découvre le gagnant
             Donne pot au gagnant
         }
-   
+
         fonction demandesLesMises() {
             FOR i, i < nombre de participants, i++
                 IF participant.miseActuel != miseActuelTable
@@ -141,7 +141,7 @@ class Table {
                 participant.miseActuel = 0
             END FOREACH
         }
-        
+
     */
 
     round() {
@@ -151,7 +151,7 @@ class Table {
             if (this.joueurs[i].dealer) {
                 this.joueurs[i].dealer = false
                 this.joueurs[i+1].dealer = true
-            }    
+            }
         }
         // Si il n'y a aucun dealer, en désigne un aléatoirement
         if (!aTrouverUnDealer)
@@ -168,28 +168,28 @@ class Table {
                 if (this.joueurs[i].dealer) {
                     this.joueurs[i+1].augmenteMise(niveauTable.PARI_MIN/2)
                     this.joueurs[i+2].augmenteMise(niveauTable.PARI_MIN)
-                }    
+                }
             }
         } else {
             for (let i; i < nombreJoueurs; i++) {
                 if (this.joueurs[i].dealer) {
                     this.joueurs[i+1].augmenteMise(niveauTable.PARI_MIN)
-                }    
+                }
             }
         }
 
 
-        
+
     }
 
     demanderLesMises() {
-        
+
     }
-    
 
-        
 
-    
+
+
+
 }
 
 

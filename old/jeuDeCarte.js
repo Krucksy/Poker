@@ -25,9 +25,9 @@ const TYPE = {
 
 class Carte {
     /**
-     * 
-     * @param {COULEUR} couleur 
-     * @param {TYPE} type 
+     *
+     * @param {COULEUR} couleur
+     * @param {typeof TYPE} type
      */
     constructor(couleur, type) {
         this.couleur = couleur
@@ -45,7 +45,7 @@ class JeuDeCarte {
         this.viderListeCarte()
         for (let i = 0; i < COULEUR.MAX; i++) {
             for (let j = 0; j < TYPE.MAX; j++) {
-                this.listeCarte.push(new Carte(i,j))
+                this.listeCarte.push(new Carte(i, j))
             }
         }
         this.mélangerListeCarte()
@@ -64,10 +64,10 @@ class JeuDeCarte {
     }
 
     tirerCartes(nombre) {
-        return this.listeCarte.splice(0,nombre)
+        return this.listeCarte.splice(0, nombre)
     }
 
-    
+
 }
 
 /**
